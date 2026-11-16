@@ -1,0 +1,82 @@
+name: CI
+
+# Lint, typecheck, test, build, the export check and the bundle size
+# check on every push to main and every pull request. The built package
+# is also loaded on the oldest supported Node runtime.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22', '24']
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node }}
+          # Corepack provides Yarn 4 below; the runner's global Yarn 1
+          # would reject the packageManager field.
+          package-manager-cache: false
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Typecheck
+        run: yarn typecheck
+
+      - name: Test
+        run: yarn test
+
+      - name: Build
+        run: yarn build
+
+      - name: Load every entry with import and require
+        run: yarn check-exports
+
+      - name: Bundle size and entry isolation
+        run: yarn bundle-size
+
+  runtime-node-20:
+    name: Runtime (Node 20)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          package-manager-cache: false
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install and build
+        run: |
+          yarn install --immutable
+          yarn build
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+          package-manager-cache: false
+
+      - name: Load every entry on Node 20
+        run: node scripts/check-exports.mjs

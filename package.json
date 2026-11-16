@@ -1,0 +1,160 @@
+{
+  "name": "@magikmaker/email-validator",
+  "version": "0.1.0",
+  "description": "Email address validation (syntax, TLD, provider rules, typos, disposable domains, DNS) with pluggable mailbox verification providers. Zero dependencies; runs on Cloudflare Workers, Node and the browser.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./disposable": {
+      "import": {
+        "types": "./dist/disposable/index.d.ts",
+        "default": "./dist/disposable/index.js"
+      },
+      "require": {
+        "types": "./dist/disposable/index.d.cts",
+        "default": "./dist/disposable/index.cjs"
+      }
+    },
+    "./dns": {
+      "import": {
+        "types": "./dist/dns/index.d.ts",
+        "default": "./dist/dns/index.js"
+      },
+      "require": {
+        "types": "./dist/dns/index.d.cts",
+        "default": "./dist/dns/index.cjs"
+      }
+    },
+    "./providers/kickbox": {
+      "import": {
+        "types": "./dist/providers/kickbox/index.d.ts",
+        "default": "./dist/providers/kickbox/index.js"
+      },
+      "require": {
+        "types": "./dist/providers/kickbox/index.d.cts",
+        "default": "./dist/providers/kickbox/index.cjs"
+      }
+    },
+    "./providers/mock": {
+      "import": {
+        "types": "./dist/providers/mock/index.d.ts",
+        "default": "./dist/providers/mock/index.js"
+      },
+      "require": {
+        "types": "./dist/providers/mock/index.d.cts",
+        "default": "./dist/providers/mock/index.cjs"
+      }
+    },
+    "./kickbox-csv": {
+      "import": {
+        "types": "./dist/kickbox-csv/index.d.ts",
+        "default": "./dist/kickbox-csv/index.js"
+      },
+      "require": {
+        "types": "./dist/kickbox-csv/index.d.cts",
+        "default": "./dist/kickbox-csv/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md",
+    "ATTRIBUTION.md"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "yarn clean && vite build && tsc -p tsconfig.build.json && node scripts/build-types.mjs",
+    "bundle-size": "node scripts/bundle-size.mjs",
+    "check-exports": "node scripts/check-exports.mjs",
+    "clean": "rimraf dist",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "major": "yarn pre-commit && yarn version major",
+    "minor": "yarn pre-commit && yarn version minor",
+    "patch": "yarn pre-commit && yarn version patch",
+    "pre-commit": "yarn lint && yarn typecheck && yarn test && yarn build && yarn check-exports && yarn bundle-size",
+    "prepublishOnly": "yarn pre-commit",
+    "release": "node scripts/release-github.mjs",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest",
+    "typecheck": "tsc -p tsconfig.json",
+    "update-disposable-domains": "node scripts/update-disposable-domains.mjs",
+    "update-lists": "node scripts/update-tlds.mjs && node scripts/update-disposable-domains.mjs",
+    "update-tlds": "node scripts/update-tlds.mjs"
+  },
+  "keywords": [
+    "email",
+    "email-validation",
+    "email-validator",
+    "email-verification",
+    "validate",
+    "verify",
+    "disposable",
+    "disposable-email",
+    "temporary-email",
+    "throwaway",
+    "typo",
+    "did-you-mean",
+    "mx",
+    "dns",
+    "dns-over-https",
+    "tld",
+    "kickbox",
+    "gmail",
+    "cloudflare-workers",
+    "workers",
+    "edge",
+    "browser",
+    "typescript",
+    "zero-dependency"
+  ],
+  "author": "magikMaker (https://magikmaker.dev)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/magikMaker/email-validator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/magikMaker/email-validator/issues"
+  },
+  "homepage": "https://github.com/magikMaker/email-validator#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "yarn@4.8.1",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^6.0.1",
+    "@types/node": "^22",
+    "@vitest/coverage-v8": "^5.1.0",
+    "barva": "^1.3.2",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.15.0",
+    "eslint-plugin-jsdoc": "^65.4.9",
+    "globals": "^17.14.0",
+    "rimraf": "^6.1.4",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.73.0",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0"
+  }
+}

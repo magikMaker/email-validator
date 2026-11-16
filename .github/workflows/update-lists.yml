@@ -1,0 +1,66 @@
+name: Refresh lists
+
+# Every Monday: regenerate the IANA TLD list and the disposable domain
+# list, run the tests against them, and open (or update) a pull request
+# when either changed. Nothing is published; the owner reviews the diff,
+# merges, and releases by hand.
+#
+# The repository needs "Allow GitHub Actions to create and approve pull
+# requests" (Settings, Actions, General, Workflow permissions).
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    name: Refresh TLD and disposable domain lists
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          package-manager-cache: false
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Regenerate the IANA TLD list
+        run: yarn update-tlds
+
+      - name: Regenerate the disposable domain list
+        run: yarn update-disposable-domains
+
+      - name: Test against the new lists
+        run: yarn test
+
+      - name: Open a pull request when a list changed
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: 'chore(data): refresh TLD and disposable lists'
+          title: 'chore(data): refresh TLD and disposable lists'
+          body: |
+            Weekly refresh of `src/data/tlds.ts` (IANA root zone) and
+            `src/data/disposable-domains.ts` (disposable-email-domains,
+            minus `lists/disposable-allowlist.txt` and the provider
+            table).
+
+            Review the added and removed entries. A real mailbox
+            provider on the disposable list goes in the allowlist.
+            Merging does not publish; add a CHANGELOG entry and release
+            by hand.
+          branch: chore/refresh-lists
+          delete-branch: true
+          add-paths: |
+            src/data/tlds.ts
+            src/data/disposable-domains.ts

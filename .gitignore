@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Build output and reports
+dist/
+coverage/
+*.tgz
+*.tsbuildinfo
+
+# Logs
+*.log
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.*
+.dev.vars
+
+# Editors and OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

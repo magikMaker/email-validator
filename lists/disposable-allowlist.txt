@@ -1,0 +1,7 @@
+# Domains that are never disposable, whatever a source says.
+#
+# One domain per line, lowercase; `#` starts a comment. Every domain of
+# the provider table (src/data/email-providers.json) is allowed as well,
+# without being listed here. Add a domain when a real mailbox provider or
+# a customer's company domain shows up on an upstream list, with a short
+# note why, and report it upstream too.
