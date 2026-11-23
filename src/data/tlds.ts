@@ -6,8 +6,8 @@
  * .github/workflows/update-lists.yml open a pull request.
  *
  * Source: https://data.iana.org/TLD/tlds-alpha-by-domain.txt
- * IANA Version 2026111600, Last Updated Mon Nov 16 07:07:02 2026 UTC
- * Entry count: 1436
+ * IANA Version 2026112201, Last Updated Mon Nov 23 07:07:01 2026 UTC
+ * Entry count: 1435
  */
 
 /** One lowercase label per line, punycode labels included. */
@@ -1272,7 +1272,6 @@ wtc
 wtf
 xbox
 xerox
-xihuan
 xin
 xn--11b4c3d
 xn--1ck2e1b
